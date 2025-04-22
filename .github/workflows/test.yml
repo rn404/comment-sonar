@@ -18,7 +18,7 @@ jobs:
           deno-version: v1.x
 
       - name: スキャンしてGitHub Issueを作成
-        run: deno run --allow-read --allow-net src/main.ts
+        run: deno run --allow-read --allow-net --allow-env src/main.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
