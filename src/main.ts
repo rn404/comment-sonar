@@ -1,29 +1,18 @@
-import { walk } from "https://deno.land/std@0.224.0/fs/mod.ts";
+import { scanTodos } from "./scanner.ts";
+import { createOrUpdateIssue } from "./github.ts";
 
-async function scanTodos(basePath: string): Promise<void> {
-  console.log(`Scanning for TODO/FIXME comments in ${basePath}`);
-  const todos: string[] = [];
+async function main() {
+  console.log("TODO/FIXMEコメントをスキャン中...");
+  const todos = await scanTodos(".");
 
-  for await (const entry of walk(basePath, { exts: [".ts", ".js"] })) {
-    const content = await Deno.readTextFile(entry.path);
-    const lines = content.split("\n");
-
-    lines.forEach((line, index) => {
-      const match = line.match(/\/\/\s*(TODO|FIXME):?\s*(.+)/i);
-      if (match) {
-        todos.push(`${entry.path}:${index + 1} - ${match[2].trim()}`);
-      }
-    });
-  }
-
-  if (todos.length === 0) {
-    console.log("No TODO/FIXME comments found.");
+  console.log(`検出されたコメント数: ${todos.length}`);
+  
+  if (Deno.env.get("GITHUB_ACTIONS")) {
+    await createOrUpdateIssue(todos);
   } else {
-    console.log("Found TODO/FIXME comments:");
-    todos.forEach((todo) => console.log(todo));
+    console.log("ローカル実行のため、Issueは作成されません。");
+    console.log(todos);
   }
 }
 
-const targetPath = Deno.args[0] || ".";
-await scanTodos(targetPath);
-
+main().catch(console.error);

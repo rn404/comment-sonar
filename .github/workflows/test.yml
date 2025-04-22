@@ -1,0 +1,24 @@
+name: Todo Comment Scanner
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 1' # 毎週月曜9時に実行
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+
+      - name: Denoセットアップ
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: スキャンしてGitHub Issueを作成
+        run: deno run --allow-read --allow-net src/main.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
