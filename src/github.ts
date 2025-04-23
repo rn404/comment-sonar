@@ -28,6 +28,7 @@ export async function createOrUpdateIssue(todos: string[]) {
 
   if (existingIssue) {
     console.log("既存のIssueを更新します。");
+    console.log(`${apiBase}/${existingIssue.number}`);
     await fetch(`${apiBase}/${existingIssue.number}`, {
       method: "PATCH",
       headers,
@@ -35,14 +36,19 @@ export async function createOrUpdateIssue(todos: string[]) {
     });
   } else {
     console.log("新規Issueを作成します。");
-    await fetch(apiBase, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        title: issueTitle,
-        body: issueBody,
-        labels: ["TODO"],
-      }),
-    });
+    console.log(apiBase);
+    try {
+      await fetch(apiBase, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          title: issueTitle,
+          body: issueBody,
+          labels: ["TODO"],
+        }),
+      });
+    } catch (error) {
+      console.error("Issueの作成中にエラーが発生しました:", error);
+    };
   }
 }
