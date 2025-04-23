@@ -38,7 +38,7 @@ export async function createOrUpdateIssue(todos: string[]) {
     console.log("新規Issueを作成します。");
     console.log(apiBase);
     try {
-      await fetch(apiBase, {
+      const createResponse = await fetch(apiBase, {
         method: "POST",
         headers,
         body: JSON.stringify({
@@ -47,6 +47,12 @@ export async function createOrUpdateIssue(todos: string[]) {
           labels: ["TODO"],
         }),
       });
+      console.log(createResponse);
+      if (createResponse.ok === true) {
+        console.log("Issueが正常に作成されました。");
+        const issueData = await createResponse.json();
+        console.log(`IssueのURL: ${issueData.html_url}`);
+      }
     } catch (error) {
       console.error("Issueの作成中にエラーが発生しました:", error);
     };
