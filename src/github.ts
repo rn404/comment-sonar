@@ -14,19 +14,18 @@ export async function createOrUpdateIssue(todos: Array<string>) {
     "Content-Type": "application/json",
   };
 
-  const issueTitle = "📌 TODO/FIXME リスト";
+  const issueTitle = "📌 TODO/FIXME List";
   const issueBody = todos.length > 0
-    ? `以下のTODO/FIXMEが見つかりました:\n\n${todos.join("\n")}`
-    : "TODO/FIXMEコメントは見つかりませんでした。";
+    ? `The following TODO/FIXME comments were found:\n\n${todos.join("\n")}`
+    : "No TODO/FIXME comments were found.";
 
-  // 既存Issueを検索
   const response = await fetch(`${apiBase}?state=open&labels=TODO`, { headers });
   const issues = await response.json();
 
   const existingIssue = issues.find((issue: any) => issue.title === issueTitle);
 
   if (existingIssue) {
-    console.log("既存のIssueを更新します。");
+    console.log("Updating the existing issue.");
     console.log(`${apiBase}/${existingIssue.number}`);
     await fetch(`${apiBase}/${existingIssue.number}`, {
       method: "PATCH",
@@ -34,7 +33,7 @@ export async function createOrUpdateIssue(todos: Array<string>) {
       body: JSON.stringify({ body: issueBody }),
     });
   } else {
-    console.log("新規Issueを作成します。");
+    console.log("Creating a new issue.");
     console.log(apiBase);
     try {
       const createResponse = await fetch(apiBase, {
@@ -48,12 +47,12 @@ export async function createOrUpdateIssue(todos: Array<string>) {
       });
       console.log(createResponse);
       if (createResponse.ok === true) {
-        console.log("Issueが正常に作成されました。");
+        console.log("Issue created successfully.");
         const issueData = await createResponse.json();
-        console.log(`IssueのURL: ${issueData.html_url}`);
+        console.log(`Issue URL: ${issueData.html_url}`);
       }
     } catch (error) {
-      console.error("Issueの作成中にエラーが発生しました:", error);
+      console.error("An error occurred while creating the issue:", error);
     };
   }
 }

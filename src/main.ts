@@ -3,15 +3,15 @@ import { createOrUpdateIssue } from "./github.ts";
 import { Logger } from "./logger.ts";
 
 async function main() {
-  Logger.message("TODO/FIXMEコメントをスキャン中...");
+  Logger.message("Scanning for TODO/FIXME comments...");
   const todos = await scanTodos(".");
 
-  Logger.message(`検出されたコメント数: ${todos.length}`);
+  Logger.message(`Number of comments detected: ${todos.length}`);
   
   if (Deno.env.get("GITHUB_ACTIONS")) {
     await createOrUpdateIssue(todos);
   } else {
-    Logger.message("ローカル実行のため、Issueは作成されません。");
+    Logger.message("Running locally, so no issues will be created.");
     Logger.message(todos);
   }
 }
