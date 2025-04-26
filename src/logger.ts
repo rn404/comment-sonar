@@ -24,7 +24,7 @@ class Logger {
         break;
     };
 
-    const messageLabel = type === 'message' ? 'Log' : type.toUpperCase()
+    const messageLabel = type === 'message' ? 'LOG' : type.toUpperCase()
     const execFn = (line: string) => {
       _execFn(`[${messageLabel}] ${line}`);
     }
