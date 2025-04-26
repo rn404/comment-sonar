@@ -17,13 +17,6 @@ async function scanTodos(basePath: string): Promise<Array<string>> {
   }
 
   return todos;
-
-  // if (todos.length === 0) {
-  //   console.log("No TODO/FIXME comments found.");
-  // } else {
-  //   console.log("Found TODO/FIXME comments:");
-  //   todos.forEach((todo) => console.log(todo));
-  // }
 }
 
 export { scanTodos };
