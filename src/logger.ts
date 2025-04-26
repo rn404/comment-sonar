@@ -1,5 +1,9 @@
 class Logger {
   private static exec = (type: string, lines: string | Array<string>) => {
+    if (type === 'debug' && Deno.env.get('DEBUG') !== 'true') {
+      return;
+    };
+
     let execFn;
 
     switch (type) {
@@ -11,6 +15,9 @@ class Logger {
         break;
       case 'info':
         execFn = console.info;
+        break;
+      case 'debug':
+        execFn = console.log;
         break;
       default:
         execFn = console.log;
@@ -43,6 +50,10 @@ class Logger {
 
   static info(messages: string | Array<string>) {
     this.exec('info', messages);
+  }
+
+  static debug(messages: string | Array<string>) {
+    this.exec('debug', messages);
   }
 }
 
