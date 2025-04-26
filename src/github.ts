@@ -3,8 +3,7 @@ export async function createOrUpdateIssue(todos: Array<string>) {
   const repo = Deno.env.get("GITHUB_REPOSITORY");
 
   if (!token || !repo) {
-    console.error("GITHUB_TOKENまたはGITHUB_REPOSITORYが設定されていません。");
-    return;
+    throw new Error("GITHUB_TOKEN or GITHUB_REPOSITORY is not set.");
   }
 
   const [owner, repoName] = repo.split("/");
