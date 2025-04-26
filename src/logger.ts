@@ -4,36 +4,39 @@ class Logger {
       return;
     };
 
-    let execFn;
+    let _execFn;
 
     switch (type) {
       case 'error':
-        execFn = console.error;
+        _execFn = console.error;
         break;
       case 'warn':
-        execFn = console.warn;
+        _execFn = console.warn;
         break;
       case 'info':
-        execFn = console.info;
+        _execFn = console.info;
         break;
       case 'debug':
-        execFn = console.log;
+        _execFn = console.log;
         break;
       default:
-        execFn = console.log;
+        _execFn = console.log;
         break;
     };
 
     const messageLabel = type === 'message' ? 'Log' : type.toUpperCase()
+    const execFn = (line: string) => {
+      _execFn(`[${messageLabel}] ${line}`);
+    }
 
     if (Array.isArray(lines) === true) {
       lines.forEach((line) => {
-        execFn(`[${messageLabel}] ${line}`);
+        execFn(line);
       });
       return;
     };
 
-    execFn(`[${messageLabel}] ${lines}`);
+    execFn(lines);
   };
 
   static message(messages: string | Array<string>) {
