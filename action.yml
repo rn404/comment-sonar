@@ -1,0 +1,17 @@
+name: 'Todo Comment Scanner'
+description: 'Scan TODO/FIXME comments and create/update a GitHub Issue'
+author: 'rn404'
+branding:
+  icon: 'list'
+  color: 'blue'
+
+inputs:
+  github_token:
+    description: 'GitHub Token for authentication'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - run: deno run --allow-read --allow-env --allow-net src/main.ts
+      shell: bash
