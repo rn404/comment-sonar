@@ -19,7 +19,10 @@ export async function createOrUpdateIssue(todos: Array<string>) {
     ? `The following TODO/FIXME comments were found:\n\n${todos.join("\n")}`
     : "No TODO/FIXME comments were found.";
 
-  const response = await fetch(`${apiBase}?state=open&labels=TODO`, { headers });
+  const url = new URL(apiBase);
+  url.searchParams.append("state", "open");
+  url.searchParams.append("labels", "TODO");
+  const response = await fetch(url.toString(), { headers });
   const issues = await response.json();
 
   const existingIssue = issues.find((issue: any) => issue.title === issueTitle);
