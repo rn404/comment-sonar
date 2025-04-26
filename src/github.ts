@@ -1,4 +1,4 @@
-export async function createOrUpdateIssue(todos: string[]) {
+export async function createOrUpdateIssue(todos: Array<string>) {
   const token = Deno.env.get("GITHUB_TOKEN");
   const repo = Deno.env.get("GITHUB_REPOSITORY");
 
