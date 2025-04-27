@@ -21,11 +21,8 @@ jobs:
         with:
           deno-version: 2.2.6
 
-      - name: Lint
-        run: deno lint
-
-      - name: Type Check
-        run: deno check src/
+      - name: Check source code quality
+        run: deno task source-guard
 
   runtime-guard:
     runs-on: ubuntu-latest
@@ -38,5 +35,5 @@ jobs:
         with:
           deno-version: 2.2.6
 
-      - name: Test
-        run: deno test --allow-all src/
+      - name: Run Tests
+        run: deno task runtime-guard

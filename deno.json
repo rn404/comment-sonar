@@ -1,20 +1,31 @@
 {
+  "tasks": {
+    "update-lockfile": "deno install --entrypoint ./src/main.ts",
+    "precommit": "deno fmt && deno lint --fix && deno test --check --frozen --allow-read --allow-env --allow-net ./src",
+    "source-guard": "deno fmt --check && deno lint && deno check ./src",
+    "runtime-guard": "deno test --frozen --allow-read --allow-env --allow-net ./src",
+    "run": "deno run --frozen --allow-read --allow-env --allow-net ./src/main.ts"
+  },
   "compilerOptions": {
     "strict": true
   },
   "lint": {
-    "include": ["../src/"],
+    "include": ["./src"],
     "rules": {
       "tags": ["recommended"]
     }
   },
   "fmt": {
-    "include": ["../src/"],
+    "include": ["./src"],
     "useTabs": false,
     "lineWidth": 80,
     "indentWidth": 2,
     "semiColons": false,
     "singleQuote": true,
     "proseWrap": "preserve"
+  },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@^1.0.17",
+    "@std/testing": "jsr:@std/testing@^1.0.11"
   }
 }
