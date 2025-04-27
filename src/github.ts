@@ -25,7 +25,8 @@ export async function createOrUpdateIssue(todos: Array<string>) {
   const response = await fetch(url.toString(), { headers });
   const issues = await response.json();
 
-  const existingIssue = issues.find((issue: any) => issue.title === issueTitle);
+  // deno-lint-ignore no-explicit-any
+  const existingIssue = issues.find((issue: any) => issue.title === issueTitle)
 
   if (existingIssue) {
     console.log("Updating the existing issue.");
