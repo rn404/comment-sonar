@@ -16,5 +16,5 @@ runs:
     - uses: denoland/setup-deno@v1
       with:
         deno-version: 2.2.6
-    - run: deno run -c .config/deno.json --lock=.config/deno.lock --allow-read --allow-env --allow-net src/main.ts
+    - run: deno run --allow-read --allow-env --allow-net src/main.ts
       shell: bash
