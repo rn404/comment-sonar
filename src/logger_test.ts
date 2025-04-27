@@ -1,4 +1,4 @@
-import { spy, assertSpyCalls, assertSpyCall } from "https://deno.land/std@0.224.0/testing/mock.ts";
+import { spy, assertSpyCalls, assertSpyCall } from "@std/testing/mock";
 import { Logger } from './logger.ts';
 
 Deno.test('Logger: message', () => {

@@ -1,4 +1,4 @@
-import { walk } from "https://deno.land/std@0.224.0/fs/mod.ts";
+import { walk } from "@std/fs";
 
 async function scanTodos(basePath: string): Promise<Array<string>> {
   console.log(`Scanning for TODO/FIXME comments in ${basePath}`);
