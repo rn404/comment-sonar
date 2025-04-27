@@ -18,7 +18,7 @@ jobs:
           deno-version: v2.2.6
 
       - name: Run Todo Comment Scanner
-        run: deno -c .config/deno.json --lock=.config/deno.lock run --allow-read --allow-env --allow-net src/main.ts
+        run: deno run -c .config/deno.json --lock=.config/deno.lock --allow-read --allow-env --allow-net src/main.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

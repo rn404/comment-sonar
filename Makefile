@@ -16,7 +16,7 @@ check:
 	deno check src/ -c $(DENO_CONFIG)
 
 test:
-	deno test -c $(DENO_CONFIG) --allow-all src/
+	deno test -c $(DENO_CONFIG) --lock=${DENO_LOCK} --allow-all src/
 
 precommit: fmt check lint test
 	@echo "Pre-commit checks passed."
