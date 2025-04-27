@@ -1,62 +1,117 @@
-export async function createOrUpdateIssue(todos: Array<string>) {
-  const token = Deno.env.get('GITHUB_TOKEN')
-  const repo = Deno.env.get('GITHUB_REPOSITORY')
+const DefaultIssueOptions = {
+  title: ':pushpin: TODO/FIXME List',
+  body: {
+    existingIssue: 'The following TODO/FIXME comments were found:\n\n',
+    noIssues: 'No TODO/FIXME comments were found.',
+  },
+  label: 'TODO',
+} as const
 
-  if (!token || !repo) {
-    throw new Error('GITHUB_TOKEN or GITHUB_REPOSITORY is not set.')
+class GithubIssueClient {
+  #apiBase: string
+  #headers: {
+    Authorization: string
+    Accept: string
+    'Content-Type': string
+  }
+  #issueOptions: typeof DefaultIssueOptions
+
+  constructor(
+    /**
+     * GitHub access token
+     */
+    token: string,
+    /**
+     * GitHub repository in the format "owner/repo"
+     */
+    repo: string,
+    private issueOptions?: typeof DefaultIssueOptions,
+  ) {
+    const [owner, name] = repo.split('/')
+    this.#apiBase = `https://api.github.com/repos/${owner}/${name}/issues`
+    this.#headers = {
+      Authorization: `token ${token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    }
+    this.#issueOptions = { ...DefaultIssueOptions, ...issueOptions }
   }
 
-  const [owner, repoName] = repo.split('/')
-  const apiBase = `https://api.github.com/repos/${owner}/${repoName}/issues`
-  const headers = {
-    Authorization: `token ${token}`,
-    'Accept': 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json',
+  private async checkExistingIssue(): Promise<
+    { issueNumber: number } | undefined
+  > {
+    const apiBase = this.#apiBase
+    const headers = this.#headers
+    const issueTitle = this.#issueOptions.title
+
+    const url = new URL(apiBase)
+    url.searchParams.append('state', 'open')
+    url.searchParams.append('labels', 'TODO')
+    const response = await fetch(url.toString(), { headers })
+    const issues = await response.json()
+
+    // deno-lint-ignore no-explicit-any
+    const matchedIssue = issues.find((issue: any) => issue.title === issueTitle)
+
+    return matchedIssue === undefined || matchedIssue === null
+      ? undefined
+      : { issueNumber: matchedIssue.number }
   }
 
-  const issueTitle = '📌 TODO/FIXME List'
-  const issueBody = todos.length > 0
-    ? `The following TODO/FIXME comments were found:\n\n${todos.join('\n')}`
-    : 'No TODO/FIXME comments were found.'
+  private async update(issueNumber: number, todos: Array<string>) {
+    const apiBase = this.#apiBase
+    const headers = this.#headers
+    const { existingIssue, noIssues } = this.#issueOptions.body
 
-  const url = new URL(apiBase)
-  url.searchParams.append('state', 'open')
-  url.searchParams.append('labels', 'TODO')
-  const response = await fetch(url.toString(), { headers })
-  const issues = await response.json()
-
-  // deno-lint-ignore no-explicit-any
-  const existingIssue = issues.find((issue: any) => issue.title === issueTitle)
-
-  if (existingIssue) {
-    console.log('Updating the existing issue.')
-    console.log(`${apiBase}/${existingIssue.number}`)
-    await fetch(`${apiBase}/${existingIssue.number}`, {
+    await fetch(`${apiBase}/${issueNumber}`, {
       method: 'PATCH',
       headers,
-      body: JSON.stringify({ body: issueBody }),
+      body: JSON.stringify({
+        body: todos.length > 0
+          ? `${existingIssue}${todos.join('\n')}`
+          : noIssues,
+      }),
     })
-  } else {
-    console.log('Creating a new issue.')
-    console.log(apiBase)
-    try {
-      const createResponse = await fetch(apiBase, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          title: issueTitle,
-          body: issueBody,
-          labels: ['TODO'],
-        }),
-      })
-      console.log(createResponse)
-      if (createResponse.ok === true) {
-        console.log('Issue created successfully.')
-        const issueData = await createResponse.json()
-        console.log(`Issue URL: ${issueData.html_url}`)
-      }
-    } catch (error) {
-      console.error('An error occurred while creating the issue:', error)
+  }
+
+  private async create(todos: Array<string>) {
+    const apiBase = this.#apiBase
+    const headers = this.#headers
+    const { title, label } = this.#issueOptions
+    const { existingIssue, noIssues } = this.#issueOptions.body
+
+    const createResponse = await fetch(apiBase, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        title,
+        body: todos.length > 0
+          ? `${existingIssue}${todos.join('\n')}`
+          : noIssues,
+        labels: [label],
+      }),
+    })
+
+    if (createResponse.ok === true) {
+      const issueData = await createResponse.json()
+      return issueData
+    }
+
+    // TODO: Handle error
+    throw new Error(
+      `Failed to create issue: Status code ${createResponse.status}`,
+    )
+  }
+
+  public async exec(todos: Array<string>) {
+    const issueExists = await this.checkExistingIssue()
+
+    if (issueExists !== undefined) {
+      await this.update(issueExists.issueNumber, todos)
+    } else {
+      await this.create(todos)
     }
   }
 }
+
+export { GithubIssueClient }
