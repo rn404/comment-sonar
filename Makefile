@@ -2,7 +2,7 @@
 # This Makefile is used to automate common tasks in a Deno project.
 
 DENO_CONFIG = .config/deno.json
-DENO_LOCK = deno.lock
+DENO_LOCK = .config/deno.lock
 
 .PHONY: fmt lint check test precommit lock-update
 
