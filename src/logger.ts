@@ -1,5 +1,8 @@
 class Logger {
-  private static exec = (type: string, lines: string | Array<string>) => {
+  private static exec = (
+    type: 'error' | 'warn' | 'info' | 'debug' | 'message' | string,
+    lines: string | Array<string>,
+  ) => {
     if (type === 'debug' && Deno.env.get('DEBUG') !== 'true') {
       return
     }
