@@ -12,7 +12,8 @@
   "lint": {
     "include": ["./src"],
     "rules": {
-      "tags": ["recommended"]
+      "tags": ["recommended"],
+      "include": ["eqeqeq"]
     }
   },
   "fmt": {
