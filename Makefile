@@ -2,8 +2,9 @@
 # This Makefile is used to automate common tasks in a Deno project.
 
 DENO_CONFIG = .config/deno.json
+DENO_LOCK = deno.lock
 
-.PHONY: fmt lint check test precommit
+.PHONY: fmt lint check test precommit lock-update
 
 fmt:
 	deno fmt -c $(DENO_CONFIG)
@@ -19,3 +20,7 @@ test:
 
 precommit: fmt check lint test
 	@echo "Pre-commit checks passed."
+
+lock-update:
+	deno cache -c $(DENO_CONFIG) --lock=$(DENO_LOCK) --lock-write src/main.ts
+	@echo "Lockfile updated."

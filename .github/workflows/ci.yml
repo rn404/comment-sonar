@@ -39,4 +39,4 @@ jobs:
           deno-version: 2.2.6
 
       - name: Test
-        run: deno test --allow-all src/
+        run: deno test -c=.config/deno.json --lock=deno.lock --allow-all src/
