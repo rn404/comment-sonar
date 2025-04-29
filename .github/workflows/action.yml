@@ -3,7 +3,7 @@ name: Todo Comment Scanner
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 9 * * 1' # 毎週月曜9時に実行
+    - cron: '0 18 * * 1' # 毎週月曜9時に実行
 
 jobs:
   scan:
