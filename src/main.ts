@@ -25,10 +25,12 @@ async function main() {
     }
     const githubClient = new GithubIssueClient(token, repo)
     await githubClient.exec(todos)
-  } else {
-    Logger.message('Running locally, so no issues will be created.')
-    Logger.message(todos)
+    return
   }
+
+  // If not running in GitHub Actions, just log the todos
+  Logger.message('Running locally, so no issues will be created.')
+  Logger.message(todos)
 }
 
 main().catch(console.error)
