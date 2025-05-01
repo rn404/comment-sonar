@@ -5,7 +5,7 @@ const DefaultIssueOptions = {
     noIssues: 'No TODO/FIXME comments were found.',
   },
   label: 'TODO',
-} as const
+}
 
 class GithubIssueClient {
   #apiBase: string
@@ -25,7 +25,10 @@ class GithubIssueClient {
      * GitHub repository in the format "owner/repo"
      */
     repo: string,
-    private issueOptions?: typeof DefaultIssueOptions,
+    /**
+     * Optional issue options
+     */
+    private issueOptions?: Partial<typeof DefaultIssueOptions>,
   ) {
     const [owner, name] = repo.split('/')
     this.#apiBase = `https://api.github.com/repos/${owner}/${name}/issues`

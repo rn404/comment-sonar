@@ -126,3 +126,45 @@ Deno.test('GithubIssueClient: exec creates a new issue if none exists', async ()
     fetchStub.restore()
   }
 })
+
+Deno.test('GithubIssueClient: custom issueOptions are applied correctly', async () => {
+  const fetchStub = stub(globalThis, 'fetch', (url, _options) => {
+    if (url.toString().includes('state=open')) {
+      return Promise.resolve({ json: () => Promise.resolve([]) } as Response)
+    }
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ number: 789 }),
+    } as Response)
+  })
+
+  try {
+    const customOptions = {
+      title: 'Custom Title',
+      label: 'CustomLabel',
+      body: {
+        existingIssue: 'Custom existing issue body',
+        noIssues: 'Custom no issues body',
+      },
+    }
+
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      customOptions,
+    )
+    await client.exec(['Custom TODO: Test case'])
+
+    assertEquals(fetchStub.calls.length, 2)
+    assertEquals(
+      fetchStub.calls[1].args[1]?.body,
+      JSON.stringify({
+        title: 'Custom Title',
+        body: 'Custom existing issue bodyCustom TODO: Test case',
+        labels: ['CustomLabel'],
+      }),
+    )
+  } finally {
+    fetchStub.restore()
+  }
+})

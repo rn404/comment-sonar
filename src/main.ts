@@ -11,6 +11,7 @@ async function main() {
   if (Deno.env.get('GITHUB_ACTIONS')) {
     const token = Deno.env.get('GITHUB_TOKEN')
     const repo = Deno.env.get('GITHUB_REPOSITORY')
+
     if (token === undefined || token === '') {
       Logger.error(
         'GITHUB_TOKEN is not set. Please set it in your GitHub Actions environment.',
@@ -23,7 +24,17 @@ async function main() {
       )
       Deno.exit(1)
     }
-    const githubClient = new GithubIssueClient(token, repo)
+
+    // Optional environment variables for GitHub Actions
+    // deno-lint-ignore no-unused-vars
+    const paths = Deno.env.get('GITHUB_PATHS')
+    const issueTitle = Deno.env.get('GITHUB_ISSUE_TITLE')
+    const issueLabel = Deno.env.get('GITHUB_ISSUE_LABEL')
+
+    const githubClient = new GithubIssueClient(token, repo, {
+      title: issueTitle,
+      label: issueLabel,
+    })
     await githubClient.exec(todos)
     return
   }
