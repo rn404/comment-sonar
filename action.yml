@@ -1,5 +1,5 @@
-name: 'Todo Comment Scanner'
-description: 'Scan TODO/FIXME comments and create/update a GitHub Issue'
+name: 'Comment sonar'
+description: 'Detect TODO/FIXME comments and create/update a GitHub Issue'
 author: 'rn404'
 branding:
   icon: 'list'
@@ -7,27 +7,27 @@ branding:
 
 inputs:
   github_token:
-    description: 'GitHub Token for authentication'
+    description: 'GitHub Token for authentication.'
     required: false
     default: '${{ github.token }}'
   github_repository:
-    description: 'GitHub Repository to scan'
+    description: 'Repository to operate on.'
     required: false
     default: '${{ github.repository }}'
-  sonar_paths:
-    description: 'Paths to scan for TODO/FIXME comments'
+  sonar_includes:
+    description: 'Glob patterns to include.'
     required: false
     default: '**/*'
-  sonar_ignores:
-    description: 'Paths to ignore during the scan'
+  sonar_excludes:
+    description: 'Glob patterns to exclude.'
     required: false
     default: ''
   issue_title:
-    description: 'Title of the GitHub Issue'
+    description: 'Title of the GitHub Issue.'
     required: false
     default: ':pushpin: TODO/FIXME Comments Found'
   issue_label:
-    description: 'Labels to apply to the GitHub Issue'
+    description: 'Label to apply to the GitHub Issue.'
     required: false
     default: 'TODO'
 

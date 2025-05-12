@@ -7,8 +7,8 @@ import { readMultiParam } from './utils/readMultiParam.ts'
 async function main() {
   Logger.message('Scanning for TODO/FIXME comments...')
 
-  const paths = readMultiParam(Deno.env.get('INPUT_SONAR_PATHS') ?? '**/*')
-  const ignorePaths = readMultiParam(Deno.env.get('INPUT_SONAR_IGNORES') ?? '')
+  const paths = readMultiParam(Deno.env.get('INPUT_SONAR_INCLUDES') ?? '**/*')
+  const ignorePaths = readMultiParam(Deno.env.get('INPUT_SONAR_EXCLUDES') ?? '')
   const sonar = new Sonar(
     Sonar.DEFAULT_COMMENT_TAGS,
     [...Sonar.DEFAULT_IGNORE_PATHS, ...ignorePaths],

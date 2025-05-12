@@ -1,4 +1,5 @@
-name: Todo Comment Scanner
+name: Todo Comment Sonar
+description: Detect TODO/FIXME comments and create/update a GitHub Issue
 
 on:
   workflow_dispatch:
@@ -17,7 +18,7 @@ jobs:
         with:
           deno-version: v2.2.6
 
-      - name: Run Todo Comment Scanner
+      - name: Run Todo Comment Sonar
         run: deno task run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
