@@ -11,6 +11,7 @@
   },
   "lint": {
     "include": ["./src"],
+    "exclude": ["./sample"],
     "rules": {
       "tags": ["recommended"],
       "include": ["eqeqeq"]
@@ -18,6 +19,7 @@
   },
   "fmt": {
     "include": ["./src"],
+    "exclude": ["./sample"],
     "useTabs": false,
     "lineWidth": 80,
     "indentWidth": 2,
