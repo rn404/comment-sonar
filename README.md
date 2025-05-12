@@ -21,7 +21,7 @@ Built with [Deno](https://deno.land/), designed to be lightweight, configurable,
 | `github_repository`| No       | Repository to operate on. Defaults to `${{ github.repository }}` |
 | `sonar_includes`   | No       | Glob patterns to include. Default: `'**/*'` |
 | `sonar_excludes`   | No       | Glob patterns to exclude. Default: `''` |
-| `issue_title`      | No       | Title of the GitHub Issue. Default: `:pushpin: TODO/FIXME Comments Found` |
+| `issue_title`      | No       | Title of the GitHub Issue. Default: `:pushpin: TODO/FIXME List` |
 | `issue_label`      | No       | Label to apply to the GitHub Issue. Default: `TODO` |
 
 ## :test_tube: Example Usage
