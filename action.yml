@@ -10,10 +10,10 @@ inputs:
     description: 'GitHub Token for authentication'
     required: false
     default: '${{ github.token }}'
-  paths:
+  sonar_paths:
     description: 'Paths to scan for TODO/FIXME comments'
     required: false
-    default: '.'
+    default: '**/*'
   issue_title:
     description: 'Title of the GitHub Issue'
     required: false

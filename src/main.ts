@@ -1,12 +1,27 @@
-import { scanTodos } from './scanner.ts'
+import { Sonar } from './sonar.ts'
 import { GithubIssueClient } from './github.ts'
 import { Logger } from './logger.ts'
+import { relativePath } from './utils/relativePath.ts'
 
 async function main() {
   Logger.message('Scanning for TODO/FIXME comments...')
-  const todos = await scanTodos('.')
 
-  Logger.message(`Number of comments detected: ${todos.length}`)
+  const paths = Deno.env.get('SONAR_PATHS') ?? '**/*'
+  const sonar = new Sonar(Sonar.DEFAULT_COMMENT_TAGS)
+  const { echos } = await sonar.scan([paths])
+
+  const repoRoot = Deno.env.get('GITHUB_WORKSPACE') ?? Deno.cwd()
+  const todos = echos.map((echo) => {
+    return [
+      `- `,
+      `${echo.commentTag}: `,
+      `${echo.comment}`,
+      ` (${relativePath(echo.fileName, repoRoot)}`,
+      `:L${echo.line})`,
+    ].join('')
+  })
+
+  Logger.message(`Number of comments detected: ${echos.length}`)
 
   if (Deno.env.get('GITHUB_ACTIONS')) {
     const token = Deno.env.get('GITHUB_TOKEN')
@@ -26,8 +41,6 @@ async function main() {
     }
 
     // Optional environment variables for GitHub Actions
-    // deno-lint-ignore no-unused-vars
-    const paths = Deno.env.get('GITHUB_PATHS')
     const issueTitle = Deno.env.get('GITHUB_ISSUE_TITLE')
     const issueLabel = Deno.env.get('GITHUB_ISSUE_LABEL')
 
