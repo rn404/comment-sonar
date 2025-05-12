@@ -1,6 +1,12 @@
 import { assertEquals } from '@std/assert'
 import { readMultiParam } from './readMultiParam.ts'
 
+Deno.test('readMultiParam: empty input', () => {
+  const input = ''
+  const actual = readMultiParam(input)
+  assertEquals(actual, [])
+})
+
 Deno.test('readMultiParam: single input', () => {
   const input = 'src/**/*.ts'
   const actual = readMultiParam(input)
