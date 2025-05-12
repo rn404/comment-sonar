@@ -29,7 +29,7 @@ class GithubIssueClient {
     /**
      * Optional issue options
      */
-    private issueOptions?: Partial<typeof DefaultIssueOptions>,
+    private issueOptions: Partial<typeof DefaultIssueOptions> = {},
   ) {
     const [owner, name] = repo.split('/')
     this.#apiBase = `https://api.github.com/repos/${owner}/${name}/issues`
@@ -105,7 +105,7 @@ class GithubIssueClient {
     const errorDetails = await createResponse.text()
     throw new Error(
       `Failed to create issue: Status code ${createResponse.status}\n` +
-      `Response body: ${errorDetails}`,
+        `Response body: ${errorDetails}`,
     )
   }
 
