@@ -49,10 +49,25 @@ async function main() {
     // Optional environment variables for GitHub Actions
     const issueTitle = Deno.env.get('INPUT_ISSUE_TITLE')
     const issueLabel = Deno.env.get('INPUT_ISSUE_LABEL')
+    const commitHash = Deno.env.get('GITHUB_SHA') ?? 'HEAD'
 
     const githubClient = new GithubIssueClient(token, repo, {
       title: issueTitle,
       label: issueLabel,
+    })
+    const todos = echos.map((echo) => {
+      return [
+        `- `,
+        `${echo.commentTag}: `,
+        `${echo.comment}`,
+        `(${
+          githubClient.getPermanentLinkMarkdown(
+            relativePath(echo.fileName, repoRoot),
+            commitHash,
+            echo.line,
+          )
+        })`,
+      ].join('')
     })
     await githubClient.exec(todos)
     return
