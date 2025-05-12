@@ -15,6 +15,7 @@ class GithubIssueClient {
     'Content-Type': string
   }
   #issueOptions: typeof DefaultIssueOptions
+  #repositoryUrl: string
 
   constructor(
     /**
@@ -38,6 +39,7 @@ class GithubIssueClient {
       'Content-Type': 'application/json',
     }
     this.#issueOptions = { ...DefaultIssueOptions, ...issueOptions }
+    this.#repositoryUrl = `https://github.com/${owner}/${name}/blob/`
   }
 
   private async checkExistingIssue(): Promise<
@@ -114,6 +116,15 @@ class GithubIssueClient {
     } else {
       await this.create(todos)
     }
+  }
+
+  public getPermanentLinkMarkdown(
+    filePath: string,
+    commitHash: string,
+    line: number,
+  ): string {
+    const url = `${this.#repositoryUrl}${commitHash}/${filePath}#L${line}`
+    return `[${filePath}:${line}](${url})`
   }
 }
 
