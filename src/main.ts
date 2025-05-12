@@ -78,4 +78,12 @@ async function main() {
   Logger.message(todos)
 }
 
-main().catch(console.error)
+main().catch((error: unknown) => {
+  if (error instanceof Error) {
+    Logger.error(error.message)
+  } else {
+    Logger.error(`Unhandled error in main:`)
+    console.error(error)
+  }
+  Deno.exit(1)
+})
