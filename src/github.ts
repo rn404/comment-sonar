@@ -102,9 +102,10 @@ class GithubIssueClient {
       return issueData
     }
 
-    // TODO: Handle error
+    const errorDetails = await createResponse.text()
     throw new Error(
-      `Failed to create issue: Status code ${createResponse.status}`,
+      `Failed to create issue: Status code ${createResponse.status}\n` +
+      `Response body: ${errorDetails}`,
     )
   }
 
