@@ -21,6 +21,10 @@ class Detector {
     return text.split(separator)
   }
 
+  private isCommentLine(line: string): boolean {
+    return /(\/\/|#|<!--|\*|\/\*)\s/.test(line)
+  }
+
   private tidy(text: string): string {
     const targetText = [...text.trim()]
     if (targetText.length > Detector.MAX_CHAR_LENGTH) {
@@ -50,6 +54,7 @@ class Detector {
     const echos: ReturnType<Detector['exec']> = lines.map(
       (line, index) => {
         if (line.trim() === '') return
+        if (this.isCommentLine(line) === false) return
 
         const detected = this.detect(line)
 
