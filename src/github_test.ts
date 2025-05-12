@@ -168,3 +168,18 @@ Deno.test('GithubIssueClient: custom issueOptions are applied correctly', async 
     fetchStub.restore()
   }
 })
+
+Deno.test('GithubIssueClient: getPermanentLinkMarkdown returns correct markdown', () => {
+  const client = new GithubIssueClient('test-token', 'owner/repo')
+
+  const actual = client.getPermanentLinkMarkdown(
+    'src/github.ts',
+    'abc123',
+    42,
+  )
+
+  assertEquals(
+    actual,
+    `[src/github.ts:42](https://github.com/owner/repo/blob/abc123/src/github.ts#L42)`,
+  )
+})
