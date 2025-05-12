@@ -22,8 +22,9 @@ class Detector {
   }
 
   private tidy(text: string): string {
-    if (text.length > Detector.MAX_CHAR_LENGTH) {
-      return text.slice(0, Detector.MAX_CHAR_LENGTH).trim() + '...'
+    const targetText = [...text.trim()]
+    if (targetText.length > Detector.MAX_CHAR_LENGTH) {
+      return targetText.slice(0, Detector.MAX_CHAR_LENGTH).join('') + '...'
     }
 
     return text.trim()
