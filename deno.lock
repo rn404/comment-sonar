@@ -183,6 +183,7 @@
     "dependencies": [
       "jsr:@std/assert@^1.0.13",
       "jsr:@std/fs@^1.0.17",
+      "jsr:@std/path@^1.0.9",
       "jsr:@std/testing@^1.0.11"
     ]
   }
