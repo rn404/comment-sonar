@@ -10,7 +10,11 @@ Deno.test('GithubIssueClient: checkExistingIssue finds an issue', async () => {
     } as Response))
 
   try {
-    const client = new GithubIssueClient('test-token', 'owner/repo')
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+    )
     const result = await client['checkExistingIssue']()
     assertEquals(result, { issueNumber: 123 })
   } finally {
@@ -26,7 +30,11 @@ Deno.test('GithubIssueClient: update modifies an existing issue', async () => {
   )
 
   try {
-    const client = new GithubIssueClient('test-token', 'owner/repo')
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+    )
     await client['update'](123, ['TODO: Test case 1', 'FIXME: Test case 2'])
 
     assertEquals(fetchStub.calls.length, 1)
@@ -48,7 +56,11 @@ Deno.test('GithubIssueClient: create creates a new issue', async () => {
     } as Response))
 
   try {
-    const client = new GithubIssueClient('test-token', 'owner/repo')
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+    )
     const result = await client['create']([
       'TODO: Test case 1',
       'FIXME: Test case 2',
@@ -81,7 +93,11 @@ Deno.test('GithubIssueClient: exec updates an existing issue if found', async ()
   })
 
   try {
-    const client = new GithubIssueClient('test-token', 'owner/repo')
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+    )
     await client.exec(['TODO: Test case 1', 'FIXME: Test case 2'])
 
     assertEquals(fetchStub.calls.length, 2)
@@ -110,7 +126,11 @@ Deno.test('GithubIssueClient: exec creates a new issue if none exists', async ()
   })
 
   try {
-    const client = new GithubIssueClient('test-token', 'owner/repo')
+    const client = new GithubIssueClient(
+      'test-token',
+      'owner/repo',
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+    )
     await client.exec(['TODO: Test case 1', 'FIXME: Test case 2'])
 
     assertEquals(fetchStub.calls.length, 2)
@@ -170,7 +190,11 @@ Deno.test('GithubIssueClient: custom issueOptions are applied correctly', async 
 })
 
 Deno.test('GithubIssueClient: getPermanentLinkMarkdown returns correct markdown', () => {
-  const client = new GithubIssueClient('test-token', 'owner/repo')
+  const client = new GithubIssueClient(
+    'test-token',
+    'owner/repo',
+    GithubIssueClient.DEFAULT_ISSUE_OPTIONS,
+  )
 
   const actual = client.getPermanentLinkMarkdown(
     'src/github.ts',

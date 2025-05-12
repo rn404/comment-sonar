@@ -47,13 +47,16 @@ async function main() {
     }
 
     // Optional environment variables for GitHub Actions
-    const issueTitle = Deno.env.get('INPUT_ISSUE_TITLE')
-    const issueLabel = Deno.env.get('INPUT_ISSUE_LABEL')
+    const issueTitle = Deno.env.get('INPUT_ISSUE_TITLE') ??
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS.title
+    const issueLabel = Deno.env.get('INPUT_ISSUE_LABEL') ??
+      GithubIssueClient.DEFAULT_ISSUE_OPTIONS.label
     const commitHash = Deno.env.get('GITHUB_SHA') ?? 'HEAD'
 
     const githubClient = new GithubIssueClient(token, repo, {
       title: issueTitle,
       label: issueLabel,
+      body: GithubIssueClient.DEFAULT_ISSUE_OPTIONS.body,
     })
     const todos = echos.map((echo) => {
       return [

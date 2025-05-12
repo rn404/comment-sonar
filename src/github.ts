@@ -17,19 +17,23 @@ class GithubIssueClient {
   #issueOptions: typeof DefaultIssueOptions
   #repositoryUrl: string
 
+  public static DEFAULT_ISSUE_OPTIONS = DefaultIssueOptions
+
   constructor(
     /**
      * GitHub access token
      */
     token: string,
+
     /**
      * GitHub repository in the format "owner/repo"
      */
     repo: string,
+
     /**
      * Optional issue options
      */
-    private issueOptions: Partial<typeof DefaultIssueOptions> = {},
+    private issueOptions: typeof DefaultIssueOptions,
   ) {
     const [owner, name] = repo.split('/')
     this.#apiBase = `https://api.github.com/repos/${owner}/${name}/issues`
@@ -38,7 +42,7 @@ class GithubIssueClient {
       Accept: 'application/vnd.github.v3+json',
       'Content-Type': 'application/json',
     }
-    this.#issueOptions = { ...DefaultIssueOptions, ...issueOptions }
+    this.#issueOptions = { ...issueOptions }
     this.#repositoryUrl = `https://github.com/${owner}/${name}/blob/`
   }
 
