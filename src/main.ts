@@ -61,7 +61,7 @@ async function main() {
     const todos = echos.map((echo) => {
       return [
         `- `,
-        `${echo.commentTag}: `,
+        `\`${echo.commentTag}\`: `,
         `${echo.comment}`,
         `(${
           githubClient.getPermanentLinkMarkdown(
