@@ -50,10 +50,11 @@ class GithubIssueClient {
     const apiBase = this.#apiBase
     const headers = this.#headers
     const issueTitle = this.#issueOptions.title
+    const issueLabel = this.#issueOptions.label
 
     const url = new URL(apiBase)
     url.searchParams.append('state', 'open')
-    url.searchParams.append('labels', 'TODO')
+    url.searchParams.append('labels', issueLabel)
     const response = await fetch(url.toString(), { headers })
     const issues = await response.json()
 
