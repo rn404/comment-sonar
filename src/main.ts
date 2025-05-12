@@ -8,7 +8,11 @@ async function main() {
   Logger.message('Scanning for TODO/FIXME comments...')
 
   const paths = readMultiParam(Deno.env.get('INPUT_SONAR_PATHS') ?? '**/*')
-  const sonar = new Sonar(Sonar.DEFAULT_COMMENT_TAGS)
+  const ignorePaths = readMultiParam(Deno.env.get('INPUT_SONAR_IGNORES') ?? '')
+  const sonar = new Sonar(
+    Sonar.DEFAULT_COMMENT_TAGS,
+    [...Sonar.DEFAULT_IGNORE_PATHS, ...ignorePaths],
+  )
   const { echos } = await sonar.scan(paths)
 
   const repoRoot = Deno.env.get('GITHUB_WORKSPACE') ?? Deno.cwd()
