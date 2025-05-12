@@ -55,7 +55,7 @@ jobs:
 
 The action generates or updates a GitHub Issue like this:
 
-> :pushpin: TODO/FIXME Comments Found
+> :pushpin: TODO/FIXME List
 > - `FIXME`: hardcoded path ([scripts/deploy.sh:5](https://github.com/your-org/your-repo/blob/abcd123/scripts/deploy.sh#L5))
 > - `TODO`: clean up debug output ([src/utils/logger.ts:12](https://github.com/your-org/your-repo/blob/abcd123/src/utils/logger.ts#L12))
 

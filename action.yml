@@ -25,7 +25,7 @@ inputs:
   issue_title:
     description: 'Title of the GitHub Issue.'
     required: false
-    default: ':pushpin: TODO/FIXME Comments Found'
+    default: ':pushpin: TODO/FIXME List'
   issue_label:
     description: 'Label to apply to the GitHub Issue.'
     required: false

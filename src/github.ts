@@ -24,12 +24,10 @@ class GithubIssueClient {
      * GitHub access token
      */
     token: string,
-
     /**
      * GitHub repository in the format "owner/repo"
      */
     repo: string,
-
     /**
      * Optional issue options
      */
