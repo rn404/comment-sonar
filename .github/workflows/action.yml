@@ -4,7 +4,7 @@ description: Detect TODO/FIXME comments and create/update a GitHub Issue
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 18 * * 1' # 毎週月曜9時に実行
+    - cron: '0 21 * * 0' # 毎週月曜9時に実行
 
 jobs:
   scan:
