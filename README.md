@@ -63,6 +63,7 @@ The action generates or updates a GitHub Issue like this:
 
 ## :hammer: Requirements
 
+- **The workflow must set `permissions` with `issues: write` to allow creating/updating issues.**
 - `GITHUB_TOKEN` is used to authenticate with the GitHub API
 
 ## :thread: Development

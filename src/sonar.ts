@@ -9,8 +9,9 @@ type Echo = {
 }
 
 class Sonar {
-  #detector: Detector
+  #rootDir: string
   #ignorePaths: Array<string>
+  #detector: Detector
 
   public static DEFAULT_COMMENT_TAGS = ['TODO', 'FIXME']
   public static DEFAULT_IGNORE_PATHS = [
@@ -19,10 +20,12 @@ class Sonar {
 
   constructor(
     commentTags: Array<string>,
+    rootDir: string,
     ignorePaths: Array<string> = [],
   ) {
-    this.#detector = new Detector(commentTags)
+    this.#rootDir = rootDir
     this.#ignorePaths = ignorePaths
+    this.#detector = new Detector(commentTags)
   }
 
   public async scan(paths: Array<string>): Promise<{ echos: Array<Echo> }> {
@@ -30,11 +33,12 @@ class Sonar {
       throw new Error('No paths provided for scanning.')
     }
 
-    const ignorePaths = this.#ignorePaths
+    const root = this.#rootDir
+    const exclude = this.#ignorePaths
     const echos: Array<Echo> = []
 
     for (const pattern of paths) {
-      for await (const file of expandGlob(pattern, { exclude: ignorePaths })) {
+      for await (const file of expandGlob(pattern, { root, exclude })) {
         if (!file.isFile) continue
 
         const fileText = await Deno.readTextFile(file.path)
