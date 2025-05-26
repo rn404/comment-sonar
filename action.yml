@@ -34,8 +34,17 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: denoland/setup-deno@v1
+    - uses: denoland/setup-deno@v2
       with:
         deno-version: 2.2.6
-    - run: deno task run
+    - run: |
+        cd ${{ github.action_path }}
+        deno task run
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_SONAR_INCLUDES: ${{ inputs.sonar_includes }}
+        INPUT_SONAR_EXCLUDES: ${{ inputs.sonar_excludes }}
+        INPUT_ISSUE_TITLE: ${{ inputs.issue_title }}
+        INPUT_ISSUE_LABEL: ${{ inputs.issue_label }}

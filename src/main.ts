@@ -9,13 +9,14 @@ async function main() {
 
   const paths = readMultiParam(Deno.env.get('INPUT_SONAR_INCLUDES') ?? '**/*')
   const ignorePaths = readMultiParam(Deno.env.get('INPUT_SONAR_EXCLUDES') ?? '')
+  const repoRoot = Deno.env.get('GITHUB_WORKSPACE') ?? Deno.cwd()
   const sonar = new Sonar(
     Sonar.DEFAULT_COMMENT_TAGS,
+    repoRoot,
     [...Sonar.DEFAULT_IGNORE_PATHS, ...ignorePaths],
   )
   const { echos } = await sonar.scan(paths)
 
-  const repoRoot = Deno.env.get('GITHUB_WORKSPACE') ?? Deno.cwd()
   const todos = echos.map((echo) => {
     return [
       `- `,
@@ -52,6 +53,7 @@ async function main() {
     const issueLabel = Deno.env.get('INPUT_ISSUE_LABEL') ??
       GithubIssueClient.DEFAULT_ISSUE_OPTIONS.label
     const commitHash = Deno.env.get('GITHUB_SHA') ?? 'HEAD'
+    Logger.message(`Permanent links will reference commit: ${commitHash}`)
 
     const githubClient = new GithubIssueClient(token, repo, {
       title: issueTitle,
@@ -72,6 +74,13 @@ async function main() {
         })`,
       ].join('')
     })
+    Logger.message(
+      echos.map((echo) => {
+        return `${echo.commentTag}: ${echo.comment} (${
+          relativePath(echo.fileName, repoRoot)
+        }:L${echo.line})`
+      }),
+    )
     await githubClient.exec(todos)
     return
   }
