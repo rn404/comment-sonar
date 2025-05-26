@@ -7,6 +7,7 @@ const DefaultIssueOptions = {
   label: 'TODO',
 }
 
+// TODO: Use octokit for better type safety and features
 class GithubIssueClient {
   #apiBase: string
   #headers: {
